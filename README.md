@@ -7,4 +7,5 @@ Ordenador 1. No sincronizado. Cambio 2, add, commit. Push: rejected. Pull, (auto
 
 
 Cambio 2
+
 Cambio 1
