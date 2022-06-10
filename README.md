@@ -5,3 +5,5 @@ No sincronizado. Cambio por ordenador 1. Push -> rejected. Pull -> aborting. Add
 Sincronizado. Cambio por ordendor 2. Push
 
 > *Accept both changes*
+
+Cambio por ordenador 1.
