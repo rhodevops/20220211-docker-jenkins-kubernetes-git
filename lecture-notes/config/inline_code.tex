@@ -1,0 +1,9 @@
+\usepackage{fancyvrb,newverbs,xcolor}
+
+\definecolor{Color}{HTML}{f5eb9f}
+
+% Guardamos la definición original para que nuestra definición no sea recursiva
+\let\oldtexttt\texttt
+\renewcommand{\texttt}[1]{
+  \colorbox{Color}{\oldtexttt{#1}}
+}
