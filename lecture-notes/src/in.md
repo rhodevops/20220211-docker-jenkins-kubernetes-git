@@ -1726,7 +1726,7 @@ Ahora se resolvería lo siguiente:
 `Create pull request` por el desarrollador 1:
 
 - En GitHub, se selecciona `Compare & pull request`. 
-- Solicitud para integrar la rama `feature/rn-000123` con la rama `main`.
+- Solicitud para integrar la rama `feature/rn-01` con la rama `main`.
 - Se selecciona `Create pull request` tras agregar un mensaje descriptivo
 
 ![Github. Create pull request](./imag/github-Create-pull-request.png)
@@ -1744,7 +1744,7 @@ automática, tras hacer el `Merge pull request`, la rama que se ha integrado en 
 Gestión del `pull request` por el responsable de la integración:
 
 - En GitHub, se accede a la pestaña `Pull requests`
-- Se selecciona el pull request abierto: `Feature/rn 01`
+- Se selecciona el pull request abierto: `Feature/rn-01`
 - Se pude optar por tres acciones: `Merge pull request`/`Close pull request`/`Comment`
 
 Normalmente, si todo está bien, se opta un `Merge pull request`:
@@ -1772,7 +1772,7 @@ hace lo siguiente:
 git init
 git add .
 git commit -m "primer commit"
-git remote add origin https://github.com/rhodevops/20220211curso_201.git
+git remote add origin https://github.com/rhodevops/<...>.git
 git branch -M main
 git branch feature/test-01 main
 git push -u origin feature/test-01
@@ -1937,10 +1937,10 @@ Creamos un `Freestyle Project` con la siguiente configuración:
   - En `Branch Specifier` indicamos `*/main*`.
 2. En **Buid Triggers**. Seleccionamos `GitHub hook trigger for GITScm polling`.
 3. En **Build**. Seleccionamos `Invoke top-level Maven targets` y lo configuramos
-para ejecutar un `mvn -f billing/pom.xml clean install`.
+para ejecutar un `mvn -f projects/p202/pom.xml clean install`.
   - En `Maven Version`, seleccionamos el que hemos configurado previamente.
   - En `goles` escribimos `clean install`. 
-  - En `Avanced`, en `POM` escribimos  `billing/pom.xml` (ruta del repositorio de github).
+  - En `Avanced`, en `POM` escribimos  `projects/p202/billing/pom.xml` (ruta del repositorio de github).
 
 ## Probar la pipeline en Jenkins
 
@@ -1950,8 +1950,8 @@ Tras guardarlo, volvemos al panel principal del proyecto y hacemos un `build now
 Podemos hacemos clic en `#1` para consultar el `Console Ouput`, podemos ver lo que se ha hecho:
 
 ```bash
-[INFO] Installing /var/jenkins_home/workspace/20220211curso_202/billing/target/billing-0.0.1-SNAPSHOT.jar to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.jar
-[INFO] Installing /var/jenkins_home/workspace/20220211curso_202/billing/pom.xml to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.pom
+[INFO] Installing /var/jenkins_home/workspace/.../billing-0.0.1-SNAPSHOT.jar to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.jar
+[INFO] Installing /var/jenkins_home/workspace/.../pom.xml to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.pom.xml
 ```
 
 **Importante** Si hacemos un push desde el repositorio local, la opción 
@@ -2078,7 +2078,7 @@ url del repositorio sin añadir .git.
   - En `Branch Specifier` indicamos `origin/feature**`.
 3. En **Buid Triggers**. Seleccionamos `GitHub hook trigger for GITScm polling`.
 4. En **Build**. Seleccionamos `Invoke top-level Maven targets` y lo configuramos
-para ejecutar un `mvn -f billing/pom.xml clean install`.
+para ejecutar un `mvn -f projects/p203/billing/pom.xml clean install`.
 
 Notas:
 
@@ -2090,7 +2090,7 @@ a continuación. Con un solo asterisco no se reconocería un slash `/`.
 
 Modificamos el archivo 
 
-> `./billing/src/test/java/com/paymentchain/billing.BasicApplicationTests.java`
+> `./projects/p202/projects/p203/billing/src/test/java/com/paymentchain/billing.BasicApplicationTests.java`
 
 ```bash
 package com.paymentchain.billing;
@@ -2172,7 +2172,7 @@ Creamos un proyecto de estilo libre con la siguiente configuración:
   - En `Branch Specifier` indicamos `origin/feature**`.
 3. En **Build**:
   - Seleccionamos `Invoke top-level Maven targets` y lo configuramos
-  para ejecutar un `mvn -f billing/pom.xml clean install`.
+  para ejecutar un `mvn -f projects/p204/billing/pom.xml clean install`.
   - Seleccionamos una shell y ejecutamos l siguiente:
 ```shell
 git branch
@@ -2249,7 +2249,7 @@ anterior.
 En el proyecto de Jenkins, tambíen se puede confiugurar la creación de resúmenes
 de nuestros test unitarios de JUnit. Se configuran en el apartado de **Post-Build Actions**.
 Hay que añadir un `Publish JUnit test result report` y escribir en `Test report XMLs` la
-ruta del workspace donde están los xml, en este caso es `billing/target/surefire-reports/*.xml`
+ruta del workspace donde están los xml, en este caso es `projects/p204/billing/target/surefire-reports/*.xml`
 
 # Entrega continua y despliegue continuo (CI/CD)
 
@@ -2321,8 +2321,8 @@ llamado `Execute SonarQube Scanner`:
 
 ```bash
 sonar.projectKey=sonarqube # nombre del oproyecto en sonarqube
-sonar.sources=billing/src/main/java # ruta de las clases que queremos anzalizar
-sonar.java.binaries=billing/target/classes # ruta de los binarios
+sonar.sources=projects/p204/billing/src/main/java # ruta de las clases que queremos anzalizar
+sonar.java.binaries=projects/p204/billing/target/classes # ruta de los binarios
 ```
 
 - Additional arguments: `-X` para habilitar el debug
