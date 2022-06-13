@@ -2174,12 +2174,12 @@ Creamos un proyecto de estilo libre con la siguiente configuración:
   - Seleccionamos `Invoke top-level Maven targets` y lo configuramos
   para ejecutar un `mvn -f projects/p204/billing/pom.xml clean install`.
   - Seleccionamos una shell y ejecutamos l siguiente:
-```shell
-git branch
-git checkout main
-# merge hacia la rama main
-git merge origin/feature/rn
-```
+  ```shell
+  git branch
+  git checkout main
+  # merge hacia la rama main
+  git merge origin/feature/rn
+  ```
 3. En **Post-Build Actions**. En `Git Publisher`, seleccionar `Push Only If Build Succeed push only if build succeeds`
 y en `branches` configurar Branch to push `main `y Target remote name `origin`
 
@@ -2334,3 +2334,70 @@ Nos interesa el siguiente orden:
 - Ejecutar el maven para compilar
 - Hacer el merge
 
+## Análisis del escaneo del proyecto
+
+Ver video del curos y/o documentarse más acerca de Sonarqube.
+
+Algunas notas:
+
+- El scaner de Sonarqube consiste en analizar si el código cumple una
+serie de estándares establecidos.
+- Si no se alcanza un cierto umbral mínimo respecto al cumplimiento de las reglas
+definidas, se considera que no se ha superado el scaner de Sonarqube.
+- Se pueden utilizar plugins.
+
+Algunos concetos:
+
+- `Rules` son los estándares o reglas que debe seguir el código.
+- `Snapshot` es una foto de los resultados/avisos/medidas (`issues`) en el código en un momento dado.
+- `Quality Profile` es un conjunto de reglas. Cada `snapshot` 
+está basado en un único Quality Profile.
+- `Quality Gate` es un conjuntode condiciones que garantizan que
+el proyecto está listo para ser lanzado.
+- `Bug` es un issue acerca de un fallo en el código. No impiden compilar el código pero debería ser resuelto.
+- `Vulnerability` es un issue de seguridad, avisa de una vulnerabilidad en el código.
+- `Code-smell` es un issue de mantenimiento, avisa sobre código que podría mejorarse, pues
+se considera malo desde el punto de vista del mantenimiento.
+
+## Crear una imagen desde Jenkins
+
+### Directorio de la práctica y requisitos
+
+Directorio de la práctica: `./projects/p205`   
+
+Se necesita:
+
+- Plugin de docker en Jenkins `CloudBees Docker Build and Publish`
+- Docker Hub
+- Docker Engine
+
+### Configuración de la pipeline en Jenkins
+
+Se configura un proyecto de estilo libre:
+
+1. En **General**. Seleccionamos `GitHub project` e introducimos la `url` del proyecto.
+2. En **Source Code Management**.
+  - Seleccionamo `git` e introducimos la `url` del repositorio de GitHub (termina en .git)
+  - `Add - Jenkins` para agregar usuario y token de GitHub.
+  - En `Additional Behaviours` añadimos un `custom user name/email addres` y escribimos
+  `jenkins` y `<correo ficticio>`
+  - En `Branch Specifier` indicamos `origin/feature**`.
+3. En **Build**:
+  - Añadimos un `Execute SonarQube Scanner`. Task to run: `scan`. 
+  Additional arguments: `-X` para habilitar el debug. Analysis properties:
+  ```bash
+  sonar.projectKey=sonarqube # nombre del oproyecto en sonarqube
+  sonar.sources=projects/p204/billing/src/main/java # ruta de las clases que queremos anzalizar
+  sonar.java.binaries=projects/p204/billing/target/classes # ruta de los binarios
+  ```
+  - Seleccionamos `Invoke top-level Maven targets` y lo configuramos
+  para ejecutar un `mvn -f projects/p204/billing/pom.xml clean install`.
+  - Seleccionamos una shell y ejecutamos l siguiente:
+  ```shell
+  git branch
+  git checkout main
+  # merge hacia la rama main
+  git merge origin/feature/rn
+  ```
+3. En **Post-Build Actions**. En `Git Publisher`, seleccionar `Push Only If Build Succeed push only if build succeeds`
+y en `branches` configurar Branch to push `main `y Target remote name `origin`
