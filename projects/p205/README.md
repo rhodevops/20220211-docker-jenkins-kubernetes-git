@@ -1,2 +1,2 @@
-# 20220211curso_204
-La práctica 204 del curso de devops 20220211
+# 20220211curso_205
+La práctica 205 del curso de devops 20220211
