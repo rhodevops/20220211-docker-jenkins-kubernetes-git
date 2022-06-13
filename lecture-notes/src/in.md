@@ -20,9 +20,8 @@ Para seguir correctamente estos apuntes, se necesita algunos conocimientos previ
 
 ## Workspace
 
-- Los archivos de las practicas se encuentra en `.\practices`.
-- Las prácticas se desarrollan en una máquina virtual de virtualbox con ubuntu. 
-Los archivos se encuentra en una ruta homóloga.
+- Los archivos de los projectos se encuentra en `.\projects`.
+- Los projectos se desarrollan en una máquina virtual de virtualbox con ubuntu. 
 
 ## Una nota muy importante
 
@@ -34,7 +33,7 @@ con el host windows. Esto podría tener que ver con los permisos de las
 carpetas, pero no lo tengo claro. Una manera de evitarlo es compartir 
 los archivos en formato comprimido y moverlos dentro de ubuntu a
 una carpeta no compartida y modificando los permisos de carpete como
-corresponda. Aún así, en algunas de las prácticas hacer esto no
+corresponda. Aún así, en algunas de los projectos hacer esto no
 es suficiente. 
 
 Problemas detectados al ejecutar docker:
@@ -60,7 +59,7 @@ incluyendo la ruta del volumen.
 
 ## Otras notas aclaratorias
 
-Aclaraciones para realizar las prácticas:
+Aclaraciones para realizar los projectos:
 
 - Cuidado con las rutas. En windows se utiliza el backslash `\` y en linux el slash `/`.
 - Hay que ejecutar los comandos desde el directorio adecuado.
@@ -106,7 +105,7 @@ Flujo de trabajo recomendado:
 
 - Estudiar conceptos
 - Preparar el entorno de desarrollo
-- Realizar las prácticas
+- Realizar los projectos
 - Probar el código
 - Depurar el código
 - Leer material de apoyo, resolver dudas
@@ -231,7 +230,7 @@ Nos piden usuario y contraseña e introducimos `admin` y `admin`.
 
 ## Docker compose y orquestar un servicio con dos imágenes
 
-Directorio de la práctica: `~\practices\p001`   
+Directorio de la práctica: `./projects/p001`   
 
 Buscamos en Docker Hub la imagen de `postgres` (verificar que es la imagen oficial). 
 Postgres es una base de datos.
@@ -287,7 +286,7 @@ credenciales definidas en el archivo yaml.
 
 ## Crear una imagen personalizada
 
-Directorio de la práctica: `~\practices\p002`   
+Directorio de la práctica: `./projects/p002`   
 
 Los archivos de la practica:
 
@@ -449,7 +448,7 @@ puerto interno, pero esto no quiere decir que se envía al mismo contenedor
 
 ## Orquestación con imágenes independientes
 
-Directorio de la práctica: `~\practices\p003`   
+Directorio de la práctica: `./projects/p003`   
 
 Notas:
 
@@ -577,7 +576,7 @@ Investigar en que contextos se utiliza lo anterior.
 
 ## Redes virtuales en docker y múltiples entornos
 
-Directorio de la práctica: `~\practices\p004`   
+Directorio de la práctica: `./projects/p004`   
 
 Distintas redes para separar distintas aplicaciones o distintos entornos.
 
@@ -738,7 +737,7 @@ Otros comandos de supervivencia:
 
 ## Primeros pasos con minikube
 
-Directorio de la práctica: `~\practices\p101`
+Directorio de la práctica: `./projects/p101`
 
 Objetivos:
 
@@ -825,7 +824,7 @@ que nos devuelve una url, a la que accedemos con un navegador.
 
 ## Workspace
 
-Directorio de la práctica: `~\practices\p102`
+Directorio de la práctica: `./projects/p102`
 
 ```yaml
 ├── devops
@@ -1293,7 +1292,7 @@ kubectl apply -f ./
 
 ## Workspace
 
-Directorio de la práctica: `~\practices\p103`
+Directorio de la práctica: `./projects/p103`
 
 ```yaml
 .
@@ -1545,7 +1544,7 @@ En `ubuntu` utilizamos el archivo `~/USER_HOME/.netrc`
 
 ## Primeros pasos con git y gihub
 
-Directorio de la práctica: `~\practices\p201`   
+Directorio de la práctica: `./projects/p201`   
 
 Notas iniciales:
 
@@ -1554,6 +1553,16 @@ Notas iniciales:
 
 Se pude empezar creando el repositorio remoto en GitHub, que tendrá el nombre
 `<user name>/<repository name>`.
+
+Algunas notas útiles:
+
+- Si estamos trabajando sobre una rama `feature` y cambiamos
+a la rama `main` antes de hacer un commit, los cambios que hemos hecho se transmiten 
+a la rama `main`. Si no queremos esto, no se puede volver a la rama main antes de 
+hacer el commit de los cambios.
+- `git checkout -b <rama>` crea una nueva rama y al mismo tiempo cambia a esa rama
+- `git merge <rama feature>` fusiona los cambios de la `<rama feature>`
+trayéndolos a la rama actual (p.e. la rama `main`).
 
 ### Día 1 del desarrollador 1
 
@@ -1746,7 +1755,7 @@ Dependiendo de la configuración, la rama integrada persiste o no. En caso de qu
 puede entrar en un `pull request` cerrado y selecionar manualmente `Delete branch` para eliminar
 la rama integrada.
 
-Observaiones:
+Observaciones:
 
 - En este punto y independientemente de que se haya eliminado o no la versión remota de la rama integrada,
 esta conitinua existiendo en el repositorio local. 
@@ -1908,7 +1917,7 @@ Jenkins permite crear pipelines para hacer posible la integración continua.
 
 ## Crear una pipeline de estilo libre con maven y github
 
-Directorio de la práctica: `~\practices\p302`
+Directorio de la práctica: `./projects/p202`
 
 Punto de partida:
 
@@ -1933,6 +1942,10 @@ para ejecutar un `mvn -f billing/pom.xml clean install`.
   - En `goles` escribimos `clean install`. 
   - En `Avanced`, en `POM` escribimos  `billing/pom.xml` (ruta del repositorio de github).
 
+## Probar la pipeline en Jenkins
+
+Para probar lo anterior, hacemos lo siguiente:
+
 Tras guardarlo, volvemos al panel principal del proyecto y hacemos un `build now`. 
 Podemos hacemos clic en `#1` para consultar el `Console Ouput`, podemos ver lo que se ha hecho:
 
@@ -1940,6 +1953,11 @@ Podemos hacemos clic en `#1` para consultar el `Console Ouput`, podemos ver lo q
 [INFO] Installing /var/jenkins_home/workspace/20220211curso_202/billing/target/billing-0.0.1-SNAPSHOT.jar to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.jar
 [INFO] Installing /var/jenkins_home/workspace/20220211curso_202/billing/pom.xml to /var/jenkins_home/.m2/repository/com/paymentchain/billing/0.0.1-SNAPSHOT/billing-0.0.1-SNAPSHOT.pom
 ```
+
+**Importante** Si hacemos un push desde el repositorio local, la opción 
+`GitHub hook trigger for GITScm polling` que hemos configurado en la pipeline
+no funciona. Para que funcione hay que configurar un `webhook` en el repositorio
+de GitHub. Esto lo haremos en el siguiente proyecto.
 
 También podemos entrar en el contenedor de jenkins
 
@@ -1971,9 +1989,10 @@ Algo de (`documentación sobre webhooks`)[https://docs.github.com/en/developers/
 
 ## Conectar Jenkins con GitHub, configurar webhooks y ngrok
 
-En esta práctica, vamos a aprender como conectar Jenkins con GitHub.
+En esta práctica, vamos a aprender como conectar Jenkins con GitHub a través
+de un webhook.
 
-Directorio de la práctica: `~\practices\p303`
+Directorio de la práctica: `./projects/p203`
 
 ### Crear el repositorio en GitHub
 
@@ -2052,7 +2071,7 @@ de seleccionar el tipo de credencial después de crearlo.
 Creamos un proyecto de estilo libre con la siguiente configuración:
 
 1. En **General**. Seleccionamos `GitHub project` e introducimos la `url` del proyecto, que es la 
-url del repostitorio sin añadir .git.
+url del repositorio sin añadir .git.
 2. En **Source Code Management**.
   - Seleccionamo `git` e introducimos la `url` del repositorio de GitHub (termina en .git)
   - `Add - Jenkins` para agregar usuario y token de GitHub.
@@ -2104,7 +2123,7 @@ Terminamos la practica haciendo un `Pull Request - Merge` en GitHub
 para integrar la rama temporal con la rama main (eliminar la rama temporal).
 
 Para dejar limpio el repositorio local, nos cambiamos a la rama `main`, eliminamos
-la rama temporal ejecutando
+la rama temporal `feature` ejecutando
 
 ```bash
 git branch -d <nombre de la rama>
@@ -2112,12 +2131,17 @@ git branch -d <nombre de la rama>
 
 y hacemos un `git pull` para actualizar la rama `main` del repositorio local.
 
+**Nota** Una mejor práctica es hacer ptimero el `git pull origin main` desde
+la rama `main` y a continuación borrar la rama `feauture`. Así, nos aseguramos
+que los cambios de la rama `feature` le han llegado a la rama `main` a través
+de la integración de las ramas en el repositorio remoto.
+ 
 ## Pipeline de automatización continua
 
 En esta práctica, vamos a hacer una pipeline de CI para automatizar los cambios 
 en el repositorio remoto. Se automatizan varias cosas.
 
-Directorio de la práctica: `~\practices\p304`
+Directorio de la práctica: `./projects/p204`
 
 ### Crear el repositorio en GitHub
 
