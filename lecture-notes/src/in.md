@@ -2371,33 +2371,88 @@ Se necesita:
 - Docker Hub
 - Docker Engine
 
-### Configuración de la pipeline en Jenkins
+### Crear la pipeline en Jenkins
 
-Se configura un proyecto de estilo libre:
+#### Configurar la integración con docker
 
-1. En **General**. Seleccionamos `GitHub project` e introducimos la `url` del proyecto.
-2. En **Source Code Management**.
-  - Seleccionamo `git` e introducimos la `url` del repositorio de GitHub (termina en .git)
-  - `Add - Jenkins` para agregar usuario y token de GitHub.
-  - En `Additional Behaviours` añadimos un `custom user name/email addres` y escribimos
-  `jenkins` y `<correo ficticio>`
-  - En `Branch Specifier` indicamos `origin/feature**`.
-3. En **Build**:
-  - Añadimos un `Execute SonarQube Scanner`. Task to run: `scan`. 
-  Additional arguments: `-X` para habilitar el debug. Analysis properties:
-  ```bash
-  sonar.projectKey=sonarqube # nombre del oproyecto en sonarqube
-  sonar.sources=projects/p204/billing/src/main/java # ruta de las clases que queremos anzalizar
-  sonar.java.binaries=projects/p204/billing/target/classes # ruta de los binarios
-  ```
-  - Seleccionamos `Invoke top-level Maven targets` y lo configuramos
-  para ejecutar un `mvn -f projects/p204/billing/pom.xml clean install`.
-  - Seleccionamos una shell y ejecutamos l siguiente:
-  ```shell
-  git branch
-  git checkout main
-  # merge hacia la rama main
-  git merge origin/feature/rn
-  ```
-3. En **Post-Build Actions**. En `Git Publisher`, seleccionar `Push Only If Build Succeed push only if build succeeds`
-y en `branches` configurar Branch to push `main `y Target remote name `origin`
+Tenemos que hacer puente entre el contenedor de jenkins y el localhost para acceder 
+al docker daemon mediante tcp. Para ello se ordena
+
+```bash
+ip route show default | awk '/default/ {print $3}'
+```
+
+Por último, el comando
+
+```bash
+ip -c a
+```
+
+nos permite obtener la dirección ip de docker (`docker0`), que en mi caso
+es `172.17.0.1`.
+
+En en localhost (linux), hay que editar el archivo `/lib/systemd/system/docker.service`
+para exponer el api del daemon de docker. Se modifica la siguiente línea:
+
+```bash
+[Service]
+ExecStart=/usr/bin/dockerd -H fd:// -H=tcp://0.0.0.0:2375
+```
+
+Básicamente se está exponiendo el servicio en el puerto 2375 del localhost.
+
+A continuación de reinician los servicios:
+
+```bash
+sudo systemctl daemon-reload
+sudo service docker restart
+```
+
+El último de los comandos puede detener algún contenedor. En nuestro caso
+detiene el contenedor de Sonarqube; el contenedor de Jenkins está configurado
+para no detenerse.
+
+Se comprueba que el api es accesible mediante el protocolo http ordenando
+
+```bash
+curl http://localhost:2375/images/json
+```
+
+o navegando a [http://localhost:2375/images/json](http://localhost:2375/images/json)
+
+#### Configurar la pipeline: imagen del backend
+
+Se configura un proyecto de estilo libre. La configuración es la misma que la del
+último pipeline añadiendo lo que se indica a continuación. Por simplificar, se
+puede quitar la parte de Sonarqube.
+
+Se añde el **build** llamado `Docker Build nad Publish` con los siguiente datos:
+
+- Repository name `rhodevops/<nombre de la imagen>`
+- Tag `0.0.1`
+- Docker Host URL `tcp://172.17.0.1:2375`
+- Server Credentials: en caso de tener contraseñas
+- Docker Registry: si se deja vacio utiliza Docker Hub
+- Registry Credentials: se añade `<DockerHub user/pasword>`
+
+Y en Advanced:
+
+- Build context `projects/p205/billing/` directorio donde está el Dockerfile
+- Additional Build Arguments `--build-arg JAR_FILE=target/*.jar` 
+
+En el Dockerfile se ha definido el argumento `ARG JAR_FILE`. Consultar el código.
+
+### Construir y publicar una imagen en DockerHub desde Jenkins
+
+Editamos el archivo `application.properties` del microservicio backend en java,
+definiendo el siguiente puerto para el servicio:
+
+```java
+server.port=7280
+```
+
+Del mismo modo editamos los archivos `environment.prod.ts` y `environment.ts` del
+fronted en angular modificando el puerto al `7280`.
+
+Descargamos e incluimos donde corresponde el Dockerfile del backend y del fronted.
+
